@@ -6,7 +6,7 @@ const Container = styled.div`
   margin: 0 auto;
   max-width: 700px;
   padding: 1rem;
-  background-color: #f7f7ff;
+  background-color: #ffffff;
 `;
 
 const Layout = ({ children }: any) => {

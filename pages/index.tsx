@@ -73,7 +73,7 @@ const CardFooter = styled.div`
 `;
 
 const Button = styled.button`
-  background: linear-gradient(#8d9fff, #cfceff);
+  background: #5db6e3;
   width: 30%;
   height: 30px;
   border-radius: 5px;
@@ -90,7 +90,6 @@ const CountryCard = ({
   capital,
   population,
   region,
-  cca2,
 }: any) => {
   const router = useRouter();
 
@@ -112,6 +111,9 @@ const CountryCard = ({
           <div>
             <FaCity /> {capital ? capital[0] : "-"}
           </div>
+          <div>
+            <FaGlobeAmericas /> Region: {region}
+          </div>
         </CountryInfo>
       </CardDescription>
       <Divider />
@@ -119,12 +121,11 @@ const CountryCard = ({
         <div>
           <BsPeople /> Population: {numberWithCommas(population)}
         </div>
-        <div>
-          <FaGlobeAmericas /> Region: {region}
-        </div>
       </CountryDetails>
       <CardFooter>
-        <Button onClick={() => router.push(`/countries/${common}`)}>More</Button>
+        <Button onClick={() => router.push(`/countries/${common}`)}>
+          More
+        </Button>
       </CardFooter>
     </Card>
   );
@@ -141,7 +142,9 @@ const Home: NextPage = ({ countries }: any) => {
 };
 
 export const getStaticProps = async () => {
-  const response = await fetch("https://restcountries.com/v3.1/all");
+  const response = await fetch(
+    "https://restcountries.com/v3.1/all?fields=flags,capital,name,population,region"
+  );
   const countries = await response.json();
 
   return {
