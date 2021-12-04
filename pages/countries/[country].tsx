@@ -172,7 +172,9 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }: any) {
   const { country } = params;
   const res = await fetch(
-    `https://restcountries.com/v3.1/name/${country}?fields=name,flags,capital,population,region,independent,currencies`
+    encodeURI(
+      `https://restcountries.com/v3.1/name/${country}?fields=name,flags,capital,population,region,independent,currencies`
+    )
   );
   const data = (await res.json()) || [];
   const region = data && data[0].region;
