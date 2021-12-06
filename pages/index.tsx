@@ -1,12 +1,12 @@
-import CountryCard from "../components/country/CountriesCard";
+import CountryCard from "../components/country/CountryCard";
 import ErrorComponent from "../components/errors/Error";
 
-type country = {
+type Country = {
   flags: {
     png: string;
     svg: string;
   };
-  capital: string;
+  capital: Array<string>;
   name: {
     common: string;
   };
@@ -15,7 +15,7 @@ type country = {
 };
 
 type CountriesProps = {
-  countries: country[];
+  countries: Country[];
 };
 
 const Home = ({
@@ -44,7 +44,7 @@ export const getStaticProps = async () => {
     const response = await fetch(
       "https://restcountries.com/v3.1/all?fields=flags,capital,name,population,region"
     );
-    const countries: country[] = await response.json();
+    const countries: Country[] = await response.json();
     return {
       props: {
         countries,

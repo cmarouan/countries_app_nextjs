@@ -27,7 +27,7 @@ type CountryProps = {
         png: string;
         svg: string;
       };
-      capital: string;
+      capital: Array<string>;
       name: {
         common: string;
       };
@@ -59,7 +59,7 @@ const Country: any = ({ params }: CountryProps) => {
     country: {
       name: { common = "" } = {},
       flags = { png: "", svg: "" },
-      capital = "",
+      capital = [""],
       population = 0,
       region = "",
       independent = false,
@@ -93,7 +93,6 @@ const Country: any = ({ params }: CountryProps) => {
             />
             <CountryRegions regions={regions} />
           </CountryContainer>
-          )
         </>
       ) : (
         <ErrorComponent />

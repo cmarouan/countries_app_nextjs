@@ -63,7 +63,7 @@ type CountryCardType = {
   name: {
     common: string
   }
-  capital: string,
+  capital: Array<string>,
   population:number
   region: string
 }

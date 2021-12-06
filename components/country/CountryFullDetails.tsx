@@ -13,7 +13,7 @@ import Info from "../../designSystem/output/Info";
 
 type countryDetails = {
     common: string 
-    capital: string
+    capital: Array<string>
     population: number
     region: string
     independent: boolean
