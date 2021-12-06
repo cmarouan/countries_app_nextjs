@@ -29,9 +29,17 @@ const RegionCountry = styled.div`
   cursor: pointer;
 `;
 
-
 type countryDetails = {
-    regions: Array<any>
+    regions: Array<{
+      name: {
+        common: string
+      },
+      capital: [string],
+      flags: {
+        png: string
+        svg: string
+      },
+    }>
 }
 
 const CountryRegions = ({

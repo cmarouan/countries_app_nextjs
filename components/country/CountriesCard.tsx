@@ -55,13 +55,26 @@ const CardFooter = styled.div`
   justify-content: right;
 `;
 
+type CountryCardType = {
+  flags: {
+    png: string
+    svg: string
+  },
+  name: {
+    common: string
+  }
+  capital: string,
+  population:number
+  region: string
+}
+
 const CountryCard = ({
     flags,
     name: { common },
     capital,
     population,
     region,
-  }: any) => {
+  }: CountryCardType) => {
     const router = useRouter();
   
     return (

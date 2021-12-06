@@ -12,12 +12,12 @@ import DetailsCard from "../../designSystem/cards/Default";
 import Info from "../../designSystem/output/Info";
 
 type countryDetails = {
-    common: string
+    common: string 
     capital: string
     population: number
-    region: Array<string>
+    region: string
     independent: boolean
-    currencies: Array<string>
+    currencies: object
 }
 
 const CountryFullDetails = ({

@@ -5,6 +5,37 @@ import Button from "../designSystem/buttons/Default";
 import CountryFullDetails from "../components/country/CountryFullDetails";
 import CountryRegions from "../components/country/CountryRegions";
 
+type regionType = Array<{
+  name: {
+    common: string;
+  };
+  capital: [string];
+  flags: {
+    png: string;
+    svg: string;
+  };
+}>;
+
+type CountryProps = {
+  params: {
+    regions: regionType;
+    country: {
+      independent: boolean;
+      currencies: object;
+      flags: {
+        png: string;
+        svg: string;
+      };
+      capital: string;
+      name: {
+        common: string;
+      };
+      population: number;
+      region: string;
+    };
+  };
+};
+
 const CountryFlag = styled.div`
   height: 101px;
   object-fit: cover;
@@ -20,12 +51,12 @@ const CountryContainer = styled.div`
   flex-direction: column;
 `;
 
-const Country: any = ({ params }: any) => {
+const Country: any = ({ params }: CountryProps) => {
   const router = useRouter();
   const {
     country: {
       name: { common = "" } = {},
-      flags = {},
+      flags = { png: "", svg: "" },
       capital = "",
       population = 0,
       region = "",
@@ -80,7 +111,7 @@ export async function getStaticProps({ params }: any) {
   );
   const data = (await res.json()) || [];
   const region = data && data[0].region;
-  var regions: any[] = [];
+  var regions: regionType = [];
 
   if (region?.length) {
     const regionResponse = await fetch(
