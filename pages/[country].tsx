@@ -10,7 +10,7 @@ type regionType = Array<{
   name: {
     common: string;
   };
-  capital: [string];
+  capital: Array<string>;
   flags: {
     png: string;
     svg: string;

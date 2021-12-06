@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { FaCity, FaGlobeAmericas } from "react-icons/fa";
 import {
   GrMapLocation,
