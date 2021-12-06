@@ -4,6 +4,7 @@ import Image from "next/image";
 import Button from "../designSystem/buttons/Default";
 import CountryFullDetails from "../components/country/CountryFullDetails";
 import CountryRegions from "../components/country/CountryRegions";
+import ErrorComponent from "../components/errors/Error";
 
 type regionType = Array<{
   name: {
@@ -33,6 +34,7 @@ type CountryProps = {
       population: number;
       region: string;
     };
+    success: boolean;
   };
 };
 
@@ -64,30 +66,38 @@ const Country: any = ({ params }: CountryProps) => {
       currencies = {},
     } = {},
     regions,
+    success,
   } = params || {};
 
   return (
     <>
-      <Button onClick={() => router.push(`/`)}>Go back</Button>
-      <CountryContainer>
-        <CountryFlag>
-          <Image
-            src={flags.png || flags.svg}
-            alt={`${common}-flag`}
-            height="100%"
-            width="100%"
-          />
-        </CountryFlag>
-        <CountryFullDetails
-          capital={capital}
-          population={population}
-          region={region}
-          independent={independent}
-          currencies={currencies}
-          common={common}
-        />
-        <CountryRegions regions={regions} />
-      </CountryContainer>
+      {success ? (
+        <>
+          <Button onClick={() => router.push(`/`)}>Go back</Button>
+          <CountryContainer>
+            <CountryFlag>
+              <Image
+                src={flags.png || flags.svg}
+                alt={`${common}-flag`}
+                height="100%"
+                width="100%"
+              />
+            </CountryFlag>
+            <CountryFullDetails
+              capital={capital}
+              population={population}
+              region={region}
+              independent={independent}
+              currencies={currencies}
+              common={common}
+            />
+            <CountryRegions regions={regions} />
+          </CountryContainer>
+          )
+        </>
+      ) : (
+        <ErrorComponent />
+      )}
     </>
   );
 };
@@ -103,33 +113,47 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: any) {
-  const { country } = params;
-  const res = await fetch(
-    encodeURI(
-      `https://restcountries.com/v3.1/name/${country}?fields=name,flags,capital,population,region,independent,currencies`
-    )
-  );
-  const data = (await res.json()) || [];
-  const region = data && data[0].region;
-  var regions: regionType = [];
-
-  if (region?.length) {
-    const regionResponse = await fetch(
-      `https://restcountries.com/v3.1/region/${region}?fields=flags,name,capital`
+  try {
+    const { country } = params;
+    const res = await fetch(
+      encodeURI(
+        `https://restcountries.com/v3.1/name/${country}?fields=name,flags,capital,population,region,independent,currencies`
+      )
     );
-    regions = await regionResponse.json();
-    regions = regions.filter((reg) => reg.name.common !== country);
-  }
+    const data = (await res.json()) || [];
+    const region = data && data[0].region;
+    var regions: regionType = [];
 
-  return {
-    props: {
-      params: {
-        country: data[0] || {},
-        regions,
+    if (region?.length) {
+      const regionResponse = await fetch(
+        `https://restcountries.com/v3.1/region/${region}?fields=flags,name,capital`
+      );
+      regions = await regionResponse.json();
+      regions = regions.filter((reg) => reg.name.common !== country);
+    }
+
+    return {
+      props: {
+        params: {
+          country: data[0] || {},
+          regions,
+          success: true,
+        },
       },
-    },
-    revalidate: false,
-  };
+      revalidate: false,
+    };
+  } catch (error) {
+    return {
+      props: {
+        params: {
+          country: {},
+          regions: [],
+          success: false,
+        },
+      },
+      revalidate: false,
+    };
+  }
 }
 
 export default Country;
