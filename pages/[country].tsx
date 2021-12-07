@@ -5,8 +5,10 @@ import Button from "../designSystem/buttons/Default";
 import CountryFullDetails from "../components/country/CountryFullDetails";
 import CountryRegions from "../components/country/CountryRegions";
 import ErrorComponent from "../components/errors/Error";
+import { Country as CountryType } from "./index";
+import Head from "next/head";
 
-type regionType = Array<{
+export type RegionType = Array<{
   name: {
     common: string;
   };
@@ -15,24 +17,15 @@ type regionType = Array<{
     png: string;
     svg: string;
   };
+  population: number;
 }>;
 
 type CountryProps = {
   params: {
-    regions: regionType;
-    country: {
+    regions: RegionType;
+    country: CountryType & {
       independent: boolean;
       currencies: object;
-      flags: {
-        png: string;
-        svg: string;
-      };
-      capital: Array<string>;
-      name: {
-        common: string;
-      };
-      population: number;
-      region: string;
     };
     success: boolean;
   };
@@ -71,6 +64,9 @@ const Country: any = ({ params }: CountryProps) => {
 
   return (
     <>
+      <Head>
+        <title>{common}</title>
+      </Head>
       {success ? (
         <>
           <Button onClick={() => router.push(`/`)}>Go back</Button>
@@ -104,16 +100,22 @@ const Country: any = ({ params }: CountryProps) => {
 export async function getStaticPaths() {
   const res = await fetch(`https://restcountries.com/v3.1/all?fields=name`);
   const countries = await res.json();
+  /**
+   * slice used to only generate at the build time the first 5 countries pages
+   */
   const paths = countries?.slice(0, 5)?.map(({ name }: any) => ({
     params: { country: name.common },
   }));
-
+  /*
+   * Since we generate only the first 5 countries, fallback should equal true in order to generate the none generated pages
+   */
   return { paths, fallback: true };
 }
 
 export async function getStaticProps({ params }: any) {
   try {
     const { country } = params;
+    // in order to avoid some bad requets urls, encodeURI used to the problem of the special characters in some countries name
     const res = await fetch(
       encodeURI(
         `https://restcountries.com/v3.1/name/${country}?fields=name,flags,capital,population,region,independent,currencies`
@@ -121,11 +123,11 @@ export async function getStaticProps({ params }: any) {
     );
     const data = (await res.json()) || [];
     const region = data && data[0].region;
-    var regions: regionType = [];
+    var regions: RegionType = [];
 
     if (region?.length) {
       const regionResponse = await fetch(
-        `https://restcountries.com/v3.1/region/${region}?fields=flags,name,capital`
+        `https://restcountries.com/v3.1/region/${region}?fields=flags,name,capital,population`
       );
       regions = await regionResponse.json();
       regions = regions.filter((reg) => reg.name.common !== country);
@@ -139,6 +141,7 @@ export async function getStaticProps({ params }: any) {
           success: true,
         },
       },
+      // No need to revalidate since countries details are stable
       revalidate: false,
     };
   } catch (error) {

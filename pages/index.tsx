@@ -1,7 +1,8 @@
 import CountryCard from "../components/country/CountryCard";
 import ErrorComponent from "../components/errors/Error";
+import Head from "next/head";
 
-type Country = {
+export type Country = {
   flags: {
     png: string;
     svg: string;
@@ -24,6 +25,9 @@ const Home = ({
 }: CountriesProps & { success: boolean }) => {
   return (
     <>
+      <Head>
+        <title>Countries</title>
+      </Head>
       {success ? (
         countries?.map((country, index: number): any => (
           <CountryCard key={`${index}-${country.name.common}`} {...country} />

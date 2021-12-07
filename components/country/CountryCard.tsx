@@ -8,6 +8,7 @@ import { numberWithCommas } from "../../helpers/formatting";
 import Divider from "../../designSystem/divider/Index";
 import Button from "../../designSystem/buttons/Default";
 import Card from "../../designSystem/cards/Default";
+import { Country } from "../../pages";
 
 const CardDescription = styled.div`
   display: flex;
@@ -55,26 +56,13 @@ const CardFooter = styled.div`
   justify-content: right;
 `;
 
-type CountryCardType = {
-  flags: {
-    png: string
-    svg: string
-  },
-  name: {
-    common: string
-  }
-  capital: Array<string>,
-  population:number
-  region: string
-}
-
 const CountryCard = ({
     flags,
     name: { common },
     capital,
     population,
     region,
-  }: CountryCardType) => {
+  } : Country) => {
     const router = useRouter();
   
     return (

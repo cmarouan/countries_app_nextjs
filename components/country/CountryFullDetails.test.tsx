@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import CountryFullDetails from "./CountryFullDetails";
 
 describe("CountryFullDetails", () => {
-  it("Should render all country card", () => {
+  it("Should render all countries cards", () => {
     const countryCard = {
         independent: true,
         common: 'common',

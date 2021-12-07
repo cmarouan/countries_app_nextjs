@@ -2,11 +2,14 @@ import { useRouter } from "next/router";
 import styled from "styled-components";
 import Image from "next/image";
 import { FaCity } from "react-icons/fa";
+import { BsPeople } from "react-icons/bs";
 import {
   GrMapLocation
 } from "react-icons/gr";
 import DetailsCard from "../../designSystem/cards/Default";
 import Info from "../../designSystem/output/Info";
+import { numberWithCommas } from "../../helpers/formatting";
+import { RegionType } from "../../pages/[country]";
 
 const SmallInfo = styled.div`
   font-size: 0.7rem;
@@ -30,16 +33,7 @@ const RegionCountry = styled.div`
 `;
 
 type countryDetails = {
-    regions: Array<{
-      name: {
-        common: string
-      },
-      capital: Array<string>,
-      flags: {
-        png: string
-        svg: string
-      },
-    }>
+    regions: RegionType
 }
 
 const CountryRegions = ({
@@ -48,7 +42,7 @@ const CountryRegions = ({
     const router = useRouter();
 
     return (<DetailsCard>
-        <Info>Bordering countries</Info>
+        <h2><Info>Bordering countries</Info></h2>
         <RegionCountries>
           {regions?.map((reg: any, index: number) => (
             <RegionCountry
@@ -67,6 +61,9 @@ const CountryRegions = ({
                 </SmallInfo>
                 <SmallInfo>
                   <FaCity /> {reg.capital ? reg.capital[0] : "-"}
+                </SmallInfo>
+                <SmallInfo>
+                  <BsPeople /> {numberWithCommas(reg.population)}
                 </SmallInfo>
               </div>
             </RegionCountry>

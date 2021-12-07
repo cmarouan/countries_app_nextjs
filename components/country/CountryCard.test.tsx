@@ -1,8 +1,8 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import CountryCard from "./CountryCard";
 
 describe("CountryCard", () => {
-  it("Should render all country card", () => {
+  it("Should render the country card", () => {
     const countryCard = {
         flags: {
             png: 'https://flagcdn.com/w320/ke.png',
@@ -12,6 +12,7 @@ describe("CountryCard", () => {
         capital: ["capital"],
         population: 1000,
         region: 'region',
+        currencies: { 'EUR': ['eur'] }
     };
     render(<CountryCard {...countryCard} />);
     expect(
